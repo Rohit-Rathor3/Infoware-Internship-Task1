@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.infoware.entity.Employee;
@@ -42,4 +44,31 @@ public class EmployeeService {
 		}
 		return "Error to delete Employee" ;
 	}
+	
+	// show employee for updation
+	public Employee getEmpForUpdate(Integer id) {
+		Optional<Employee> e = repo.findById(id);
+		if(e.isPresent())
+		{
+			return e.get();
+		}
+		return null ;
+	}
+	
+	public String updateEmployee(Employee e) {
+		Employee e1 = repo.getById(e.getId());
+		if(e1!=null) {
+			e1 = e;
+			repo.save(e);
+			return "Employee Updated Successfully";
+		}
+		return " Error to save employee";
+	}
+	
+	
+	// get employee with pagination
+	public Page<Employee> getEmployeesPageData(Pageable pageable) {
+        Page<Employee> page=repo.findAll(pageable);
+	return page;
+}
 }
